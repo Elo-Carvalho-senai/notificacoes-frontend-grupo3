@@ -1,7 +1,7 @@
 import { useState } from "react";
 import FilterChip from "./components/FilterChip";
 import NotificationCard from "./components/NotificationCard";
-import Button from "./components/Button";
+import Button from "./components/Button"; 
 const notificacoesExemplo = [
   {
     id: 1,

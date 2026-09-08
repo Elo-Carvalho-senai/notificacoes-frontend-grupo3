@@ -1,4 +1,4 @@
-:root {
+/* :root {
   --text: #6b6375;
   --text-h: #08060d;
   --bg: #fff;
@@ -108,4 +108,11 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+} */
+
+@import "tailwindcss";
+
+@theme {
+--color-marca: #0f4d46; /* troquem pelas cores de vocês */
+--color-destaque: #ff4a26;
 }

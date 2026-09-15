@@ -1,5 +1,4 @@
 import { useState } from "react";
-// Correção dos caminhos apontando para a pasta correta "componentes"
 import FilterBar from "./components/FilterBar";
 import FilterChip from "./components/FilterChip";
 

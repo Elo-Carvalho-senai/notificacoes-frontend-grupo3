@@ -1,8 +1,13 @@
 import { useState } from "react";
 // Correção dos caminhos apontando para a pasta correta "componentes"
-import NotificationList from "./components/NotificationList";
 import FilterBar from "./components/FilterBar";
+import FilterChip from "./components/FilterChip";
+
+import NotificationList from "./components/NotificationList";
 import NovaNotificacaoForm from "./components/NovaNotificacaoForm";
+import NotificationCard from "./components/NotificationCard";
+
+import Button from "./components/Button";
 
 const notificacoesExemplo = [
   {
@@ -25,8 +30,8 @@ const notificacoesExemplo = [
 
 function App() {
   // Inicializa o estado com a lista de exemplos para você não ver a tela vazia de início
-  const [notificacoes, setNotificacoes] = useState(notificacoesExemplo);
   const [filtro, setFiltro] = useState("todas");
+  const [notificacoes, setNotificacoes] = useState(notificacoesExemplo);
 
   // Função para adicionar nova notificação respeitando a imutabilidade
   function adicionarNotificacao(nova) { 
@@ -36,7 +41,8 @@ function App() {
   // Lógica que filtra o array antes de mandar para o componente de listagem
   const notificacoesFiltradas = notificacoes.filter((n) => {
     if (filtro === "todas") return true;
-    return n.canal.toLowerCase() === filtro.toLowerCase();
+    if (filtro === "push") return n.canal === "PUSH";
+    if (filtro === "email") return n.canal === "EMAIL";
   });
 
   return (

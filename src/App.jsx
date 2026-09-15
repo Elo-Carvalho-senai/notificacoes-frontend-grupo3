@@ -4,7 +4,7 @@ import NotificationList from "./components/NotificationList";
 import NovaNotificacaoForm from "./components/NovaNotificacaoForm";
 
 const notificacoesIniciais = [
- {
+  {
     id: 1,
     canal: "PUSH",
     hora: "14:32",
@@ -20,33 +20,15 @@ const notificacoesIniciais = [
     texto: "Não esqueça o notebook.",
     lida: true,
   },
-]
-
+];
 
 function App() {
   const [notificacoes, setNotificacoes] = useState(notificacoesIniciais);
   const [filtro, setFiltro] = useState("todas");
-//   const [canal, setCanal] = useState("PUSH");
 
-    return (
-    <div className="max-w-2xl mx-auto p-4 min-h-screen bg-fundo text-texto font-sans">
-      <h1 className="text-2xl font-bold mb-4 text-marca">Central de Notificações</h1>
+  // A FUNÇÃO ADICIONAR E A FILTRAGEM DEVEM FICAR AQUI DENTRO DO APP:
 
-      {/* 1. Formulário controlado para criar notificações */}
-      <NovaNotificacaoForm onAdicionar={adicionarNotificacao} />
-
-      {/* 2. Barra de filtros com elevação de estado */}
-      <FilterBar filtroAtual={filtro} onFiltroChange={setFiltro} />
-
-      {/* 3. Lista isolada de notificações (trata estado vazio internamente) */}
-      <NotificationList notificacoes={notificacoesFiltradas} />
-    </div>
-  );
-}
-
-
-
-  // Adiciona a nova notificação no topo sem mutar o array original (Encontro 7)
+  // Adiciona a nova notificação no topo sem mutar o array original
   function adicionarNotificacao(nova) {
     setNotificacoes((atual) => [nova, ...atual]);
   }
@@ -58,6 +40,20 @@ function App() {
     return true; // "todas"
   });
 
+  return (
+    <div className="max-w-2xl mx-auto p-4 min-h-screen bg-fundo text-texto font-sans">
+      <h1 className="text-2xl font-bold mb-4 text-marca">Central de Notificações</h1>
 
+      {/* 1. Formulário controlado para criar notificações */}
+      <NovaNotificacaoForm onAdicionar={adicionarNotificacao} />
 
- export default App;
+      {/* 2. Barra de filtros com elevação de estado */}
+      <FilterBar filtroAtual={filtro} onFiltroChange={setFiltro} />
+
+      {/* 3. Lista isolada de notificações */}
+      <NotificationList notificacoes={notificacoesFiltradas} />
+    </div>
+  );
+} // O fechamento da função App deve vir AQUI, englobando tudo.
+
+export default App;

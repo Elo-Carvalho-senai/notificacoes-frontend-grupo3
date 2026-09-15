@@ -1,13 +1,10 @@
-import react, { reactCompilerPreset } from '@vitejs/plugin-react'
-import babel from '@rolldown/plugin-babel'
 import { defineConfig } from 'vite'
-import tailwindcss from "@tailwindcss/vite";
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite' // 1. Importar aqui
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss(),
-    babel({ presets: [reactCompilerPreset()] })
+    tailwindcss() // 2. Adicionar aqui
   ],
 })

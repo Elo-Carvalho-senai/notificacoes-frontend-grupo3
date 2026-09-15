@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-    --color-marca: #0f4d46; /* troquem pelas cores de vocês */
-    --color-destaque: #ff4a26;
+    --color-brand: #0f4d46;
+    /* Cor primária do grupo (ex: antigo bg-blue-600) */
+    --color-highlight: #ff4a26;
+    /* Cor de destaque/alerta do grupo */
 }

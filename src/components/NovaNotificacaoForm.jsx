@@ -1,65 +1,62 @@
 import { useState } from "react";
-import Button from "./Button";
+import Button from "./Button"; // Garanta que o nome do componente de botão está correto
 
 function NovaNotificacaoForm({ onAdicionar }) {
   const [titulo, setTitulo] = useState("");
   const [texto, setTexto] = useState("");
-  const [canal, setCanal] = useState("PUSH");
+  const [canal, setCanal] = useState("PUSH"); // Valor padrão inicial
 
   function handleSubmit(e) {
-    e.preventDefault();
-    if (!titulo.trim()) return;
+    e.preventDefault(); // Impede a página de recarregar
+    
+    if (!titulo.trim()) return; // Validação básica para não enviar vazio
 
+    // Monta o objeto da nova notificação e envia para o componente pai
     onAdicionar({
-      id: Date.now(),
+      id: Date.now(), // Gera um ID único provisório
       canal,
-      hora: new Date().toLocaleTimeString().slice(0, 5),
+      hora: new Date().toLocaleTimeString().slice(0, 5), // Formata a hora em HH:MM
       titulo,
       texto,
       lida: false,
-      temBotao: false,
     });
 
+    // Limpa os campos após o envio
     setTitulo("");
     setTexto("");
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-3 mb-4 bg-white p-4 rounded-2xl border border-slate-100 shadow-xs"
-    >
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2 mb-6 p-4 bg-white rounded-xl border border-gray-100">
       <input
         type="text"
         value={titulo}
         onChange={(e) => setTitulo(e.target.value)}
         placeholder="Título da notificação"
-        className="border border-slate-200 rounded-lg px-3 py-2 text-xs bg-slate-50/50 focus:outline-none focus:bg-white focus:border-[#1d5c58]"
+        className="border border-gray-200 rounded-lg px-3 py-2 text-sm"
       />
-
+      
       <textarea
         value={texto}
         onChange={(e) => setTexto(e.target.value)}
-        placeholder="Texto"
-        rows={2}
-        className="border border-slate-200 rounded-lg px-3 py-2 text-xs bg-slate-50/50 resize-none focus:outline-none focus:bg-white focus:border-[#1d5c58]"
+        placeholder="Texto da mensagem..."
+        className="border border-gray-200 rounded-lg px-3 py-2 text-sm h-20 resize-none"
       />
 
-      <div className="flex gap-2 items-center justify-between">
-        <select
-          value={canal}
+      <div className="flex gap-4 my-1 text-sm items-center">
+        <label className="text-gray-500">Canal:</label>
+        <select 
+          value={canal} 
           onChange={(e) => setCanal(e.target.value)}
-          className="border border-slate-200 rounded-lg px-3 py-1.5 text-xs bg-slate-50 font-medium text-slate-700 cursor-pointer focus:outline-none"
+          className="border border-gray-200 rounded p-1 bg-white"
         >
-          <option value="PUSH">PUSH</option>
-          <option value="EMAIL">E-MAIL</option>
-          <option value="ALERTA">ALERTA</option>
+          <option value="PUSH">Push</option>
+          <option value="EMAIL">E-mail</option>
+          <option value="ALERTA">Alerta</option>
         </select>
-
-        <Button type="submit" variant="destaque">
-          Adicionar notificação
-        </Button>
       </div>
+
+      <Button variant="destaque">Enviar notificação de teste</Button>
     </form>
   );
 }

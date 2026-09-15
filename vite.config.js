@@ -7,4 +7,7 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
+  server: {
+    open: true // Isso força o Vite a disparar a abertura automática
+  }
 });

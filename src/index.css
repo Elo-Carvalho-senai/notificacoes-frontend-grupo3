@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-  --color-marca: #004d40;     /* Verde-escuro do topo */
-  --color-destaque: #ff4a26;  /* Laranja/Vermelho dos destaques */
+  --color-marca: #004d40;     /* Verde-escuro principal do topo e chips ativos */
+  --color-destaque: #ff4a26;  /* Laranja/Vermelho para o botão e status não lido */
 }

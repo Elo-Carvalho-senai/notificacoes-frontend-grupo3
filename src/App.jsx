@@ -1,76 +1,64 @@
 import { useState } from "react";
-import FilterChip from "./components/FilterChip";
-import NotificationCard from "./components/NotificationCard";
-import Button from "./components/Button";
+import Button from "./Button"; // Ajuste o caminho se o seu Button estiver em outra pasta
 
-// Lista fixa inicial baseada no modelo oficial do professor (Página 15)
-const notificacoesExemplo = [
-  {
-    id: 1,
-    canal: "PUSH",
-    hora: "10:42",
-    titulo: "Servidor em Manutenção",
-    texto: "A manutenção do servidor API-Grupo3 começará em breve...",
-    lida: false,
-  },
-  {
-    id: 2,
-    canal: "EMAIL",
-    hora: "Ontem",
-    titulo: "Bem-vindo à Plataforma",
-    texto: "Explore os recursos da BiblioTech e aproveite ao máximo.",
-    lida: true,
-  },
-  {
-    id: 3,
-    canal: "ALERTA",
-    hora: "25/08",
-    titulo: "Nova tentativa de login",
-    texto: "Detectamos uma nova tentativa de login na sua conta.",
-    lida: true,
-  },
-];
+function NovaNotificacaoForm({ onAdicionar }) {
+  const [titulo, setTitulo] = useState("");
+  const [texto, setTexto] = useState("");
+  const [canal, setCanal] = useState("PUSH");
 
-export default function App() {
-  const [filtro, setFiltro] = useState("todas");
+  function handleSubmit(e) {
+    e.preventDefault(); // Impede a página de recarregar
+    
+    if (!titulo.trim()) return; // Validação para não enviar título vazio
 
-  // Filtra as notificações dinamicamente com base no estado do filtro
-  const notificacoesFiltradas = notificacoesExemplo.filter((item) => {
-    if (filtro === "todas") return true;
-    return item.canal.toLowerCase() === filtro.toLowerCase();
-  });
+    // Envia a nova notificação para o App.jsx
+    onAdicionar({
+      id: Date.now(),
+      canal,
+      hora: new Date().toLocaleTimeString().slice(0, 5), // Formato HH:MM
+      titulo,
+      texto,
+      lida: false,
+    });
+
+    // Limpa os campos do formulário
+    setTitulo("");
+    setTexto("");
+  }
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      {/* Título Principal */}
-      <h1 className="text-2xl font-bold mb-4">Central de Notificações</h1>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2 mb-6 p-4 bg-white rounded-xl border border-gray-100 shadow-sm">
+      <input
+        type="text"
+        value={titulo}
+        onChange={(e) => setTitulo(e.target.value)}
+        placeholder="Título da notificação"
+        className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-emerald-500"
+      />
+      
+      <textarea
+        value={texto}
+        onChange={(e) => setTexto(e.target.value)}
+        placeholder="Texto da mensagem..."
+        className="border border-gray-200 rounded-lg px-3 py-2 text-sm h-20 resize-none focus:outline-emerald-500"
+      />
 
-      {/* Menu de Filtros explícito via propriedades diretas (Páginas 15/16) */}
-      <div className="flex gap-2 mb-4">
-        <FilterChip
-          label="Todas"
-          ativo={filtro === "todas"}
-          onClick={() => setFiltro("todas")}
-        />
-        <FilterChip
-          label="Push"
-          ativo={filtro === "push"}
-          onClick={() => setFiltro("push")}
-        />
-        <FilterChip
-          label="E-mail"
-          ativo={filtro === "email"}
-          onClick={() => setFiltro("email")}
-        />
+      <div className="flex gap-4 my-1 text-sm items-center">
+        <label className="text-gray-500 font-medium">Canal:</label>
+        <select 
+          value={canal} 
+          onChange={(e) => setCanal(e.target.value)}
+          className="border border-gray-200 rounded p-1 bg-white text-gray-700"
+        >
+          <option value="PUSH">Push</option>
+          <option value="EMAIL">E-mail</option>
+          <option value="ALERTA">Alerta</option>
+        </select>
       </div>
 
-      {/* Renderização direta da lista usando .map() conforme o checklist oficial */}
-      {notificacoesFiltradas.map((n) => (
-        <NotificationCard key={n.id} {...n} />
-      ))}
-
-      {/* Botão padrão do sistema usando a variação correta */}
       <Button variant="destaque">Enviar notificação de teste</Button>
-    </div>
+    </form>
   );
 }
+
+export default NovaNotificacaoForm;

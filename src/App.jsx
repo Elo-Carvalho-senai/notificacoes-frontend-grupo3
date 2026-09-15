@@ -1,122 +1,76 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState } from "react";
+import FilterChip from "./components/FilterChip";
+import NotificationCard from "./components/NotificationCard";
+import Button from "./components/Button";
 
-function App() {
-  const [count, setCount] = useState(0)
+// Lista fixa inicial baseada no modelo oficial do professor (Página 15)
+const notificacoesExemplo = [
+  {
+    id: 1,
+    canal: "PUSH",
+    hora: "10:42",
+    titulo: "Servidor em Manutenção",
+    texto: "A manutenção do servidor API-Grupo3 começará em breve...",
+    lida: false,
+  },
+  {
+    id: 2,
+    canal: "EMAIL",
+    hora: "Ontem",
+    titulo: "Bem-vindo à Plataforma",
+    texto: "Explore os recursos da BiblioTech e aproveite ao máximo.",
+    lida: true,
+  },
+  {
+    id: 3,
+    canal: "ALERTA",
+    hora: "25/08",
+    titulo: "Nova tentativa de login",
+    texto: "Detectamos uma nova tentativa de login na sua conta.",
+    lida: true,
+  },
+];
+
+export default function App() {
+  const [filtro, setFiltro] = useState("todas");
+
+  // Filtra as notificações dinamicamente com base no estado do filtro
+  const notificacoesFiltradas = notificacoesExemplo.filter((item) => {
+    if (filtro === "todas") return true;
+    return item.canal.toLowerCase() === filtro.toLowerCase();
+  });
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="max-w-2xl mx-auto p-4">
+      {/* Título Principal */}
+      <h1 className="text-2xl font-bold mb-4">Central de Notificações</h1>
 
-      <div className="ticks"></div>
+      {/* Menu de Filtros explícito via propriedades diretas (Páginas 15/16) */}
+      <div className="flex gap-2 mb-4">
+        <FilterChip
+          label="Todas"
+          ativo={filtro === "todas"}
+          onClick={() => setFiltro("todas")}
+        />
+        <FilterChip
+          label="Push"
+          ativo={filtro === "push"}
+          onClick={() => setFiltro("push")}
+        />
+        <FilterChip
+          label="E-mail"
+          ativo={filtro === "email"}
+          onClick={() => setFiltro("email")}
+        />
+      </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      {/* Renderização direta da lista usando .map() conforme o checklist oficial */}
+      {notificacoesFiltradas.map((n) => (
+        <NotificationCard key={n.id} {...n} />
+      ))}
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      {/* Botão padrão do sistema usando a variação correta */}
+      <Button variant="destaque">Enviar notificação de teste</Button>
+    </div>
+  );
 }
-
-export default App

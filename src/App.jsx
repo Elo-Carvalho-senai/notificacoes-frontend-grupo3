@@ -1,14 +1,9 @@
 import { useState } from "react";
 import FilterBar from "./components/FilterBar";
-import FilterChip from "./components/FilterChip";
-
 import NotificationList from "./components/NotificationList";
 import NovaNotificacaoForm from "./components/NovaNotificacaoForm";
-import NotificationCard from "./components/NotificationCard";
 
-import Button from "./components/Button";
-
-const notificacoesExemplo = [
+const notificacoesIniciais = [
   {
     id: 1,
     canal: "PUSH",
@@ -28,9 +23,8 @@ const notificacoesExemplo = [
 ];
 
 function App() {
-  // Inicializa o estado com a lista de exemplos para você não ver a tela vazia de início
   const [filtro, setFiltro] = useState("todas");
-  const [notificacoes, setNotificacoes] = useState(notificacoesExemplo);
+  const [notificacoes, setNotificacoes] = useState(notificacoesIniciais);
 
   // Função para adicionar nova notificação respeitando a imutabilidade
   function adicionarNotificacao(nova) { 
@@ -38,7 +32,7 @@ function App() {
   } 
 
   // Lógica que filtra o array antes de mandar para o componente de listagem
-  const notificacoesFiltradas = notificacoes.filter((n) => {
+  const notificacoesVisiveis = notificacoes.filter((n) => {
     if (filtro === "todas") return true;
     if (filtro === "push") return n.canal === "PUSH";
     if (filtro === "email") return n.canal === "EMAIL";
@@ -48,14 +42,14 @@ function App() {
     <div className="max-w-2xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Central de Notificações</h1>
       
-      {/* Passo 3: Formulário controlado adicionado no topo */}
+      {/* Formulário controlado adicionado no topo */}
       <NovaNotificacaoForm onAdicionar={adicionarNotificacao} />
       
-      {/* Passo 2: Barra de filtros extraída */}
+      {/* Barra de filtros extraída */}
       <FilterBar filtroAtual={filtro} onFiltroChange={setFiltro} />
       
-      {/* Passo 1: Lista isolada que recebe as notificações filtradas */}
-      <NotificationList notificacoes={notificacoesFiltradas} />
+      {/* Lista isolada que recebe as notificações filtradas */}
+      <NotificationList notificacoes={notificacoesVisiveis} />
     </div>
   );
 }

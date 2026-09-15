@@ -1,15 +1,11 @@
-function NotificationCard({ canal, hora, titulo, texto, lida }) {
+function NotificationCard({ titulo, mensagem, hora }) {
     return (
-        <div className="bg-white border border-gray-200 rounded-xl p-4 mb-4">
-            <div className="flex gap-2 text-xs font-mono text-gray-500 mb-2">
-                <span className="bg-teal-50 text-marca px-2 py-0.5 rounded">
-                    {canal}
-                </span>
-                <span>{hora}</span>
-                {!lida && <span>não lida</span>}
+        <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 max-w-md flex flex-col gap-1">
+            <div className="flex justify-between items-start">
+                <h4 className="font-bold text-gray-900">{titulo}</h4>
+                <span className="text-xs text-gray-400">{hora}</span>
             </div>
-            <h3 className="font-semibold text-base mb-1">{titulo}</h3>
-            <p className="text-gray-600 text-sm">{texto}</p>
+            <p className="text-sm text-gray-600">{mensagem}</p>
         </div>
     );
 }

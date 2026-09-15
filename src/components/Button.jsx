@@ -1,15 +1,12 @@
-function Button({ children, variant = "primario", onClick }) {
-    const estilos = {
-        primario: "bg-marca text-white",
-        destaque: "bg-destaque text-white",
-    };
+function Button({ texto, onClick }) {
     return (
         <button
             onClick={onClick}
-            className={`px-4 py-2 rounded-lg font-semibold ${estilos[variant]}`}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
         >
-            {children}
+            {texto}
         </button>
     );
 }
+
 export default Button;

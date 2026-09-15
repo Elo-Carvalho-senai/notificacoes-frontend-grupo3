@@ -1,14 +1,12 @@
-function FilterChip({ label, ativo, onClick }) {
+function Filterchip({ texto, ativo = false }) { // Usando valor padrão se não for passado
     return (
-        <button
-            onClick={onClick}
-            className={`px-3 py-1.5 rounded-full text-sm border ${ativo
-                    ? "bg-marca text-white border-marca"
-                    : "bg-white text-gray-500 border-gray-200"
-                }`}
-        >
-            {label}
-        </button>
+        <span className={`px-3 py-1 rounded-full text-sm font-semibold transition-colors cursor-pointer ${ativo
+            ? 'bg-blue-100 text-blue-800 border border-blue-300'
+            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}>
+            {texto}
+        </span>
     );
 }
-export default FilterChip;
+
+export default Filterchip;

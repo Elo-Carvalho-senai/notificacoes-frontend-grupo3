@@ -1,22 +1,22 @@
 import FilterChip from "./FilterChip";
 
-function FilterBar({ filtroAtual, onMudarFiltro }) {
+function FilterBar({ filtroAtual, onFiltroChange }) {
     return (
         <div className="flex gap-2 mb-4">
             <FilterChip
                 label="Todas"
                 ativo={filtroAtual === "todas"}
-                onClick={() => onMudarFiltro("todas")}
+                onClick={() => onFiltroChange("todas")}
             />
             <FilterChip
                 label="Push"
                 ativo={filtroAtual === "push"}
-                onClick={() => onMudarFiltro("push")}
+                onClick={() => onFiltroChange("push")}
             />
             <FilterChip
                 label="E-mail"
                 ativo={filtroAtual === "email"}
-                onClick={() => onMudarFiltro("email")}
+                onClick={() => onFiltroChange("email")}
             />
         </div>
     );

@@ -113,6 +113,9 @@ code {
 @import "tailwindcss";
 
 @theme {
---color-marca: #0f4d46; /* troquem pelas cores de vocês */
---color-destaque: #ff4a26;
+  --color-marca: #0F4D46;   /* Verde Petróleo */
+  --color-destaque: #FF4A26; /* Coral */
+  --color-fundo: #FAFAF7;    /* Off-White */
+  --color-card: #EAF0EE;     /* Verde Lavado */
+  --color-texto: #14201E;    /* Ink Escuro */
 }

@@ -1,49 +1,50 @@
 import { useState } from "react";
-import FilterChip from "./components/FilterChip";
+import FilterBar from "./components/FilterBar";
+import NotificationList from "./components/NotificationList";
 import NotificationCard from "./components/NotificationCard";
 import Button from "./components/Button";
 
-// 1. Lista de dados fictícios (Mock data)
-const notificacoesExemplo = [
-  {
-    id: 1,
-    canal: "PUSH",
-    hora: "14:32",
-    titulo: "Inscrição confirmada",
-    texto: "Seu lugar está garantido.",
-    lida: false,
-  },
-  {
-    id: 2,
-    canal: "EMAIL",
-    hora: "13:10",
-    titulo: "Evento amanhã",
-    texto: "Não esqueça o notebook.",
-    lida: true,
-  },
-];
-
-// 2. Componente de Composição (Casca Reutilizável usando children)
-function NotificationList({ title, children }) {
-  return (
-    <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm mb-4">
-      <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
-        {title}
-      </h2>
-      {/* O miolo variável entra exatamente aqui através do children */}
-      <div className="flex flex-col gap-1">
-        {children}
-      </div>
-    </div>
-  );
-}
-
-// 3. Componente Principal Raiz
 export default function App() {
+  // Estado do filtro selecionado
   const [filtro, setFiltro] = useState("todas");
 
-  // Lógica para filtrar a lista na tela de verdade de acordo com o estado do chip
-  const notificacoesFiltradas = notificacoesExemplo.filter((n) => {
+  // Parte 3: A lista de notificações como um estado real do React
+  const [notificacoes, setNotificacoes] = useState([
+    {
+      id: 1,
+      canal: "PUSH",
+      hora: "14:32",
+      titulo: "Inscrição confirmada",
+      texto: "Seu lugar está garantido.",
+      lida: false,
+    },
+    {
+      id: 2,
+      canal: "EMAIL",
+      hora: "13:10",
+      titulo: "Evento amanhã",
+      texto: "Não esqueça o notebook.",
+      lida: true,
+    },
+  ]);
+
+  // Parte 3: Função correta que cria um array NOVO sem usar .push()
+  const adicionarNotificacaoTeste = () => {
+    const nova = {
+      id: Date.now(),
+      canal: "PUSH",
+      hora: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
+      titulo: "Nova Notificação de Teste",
+      texto: "Esta notificação foi adicionada usando a função de estado imutável!",
+      lida: false,
+    };
+
+    // REGRA DE OURO: Usando a função (atual) => [nova, ...atual] recomendado pela folha
+    setNotificacoes((atual) => [nova, ...atual]);
+  };
+
+  // Lógica para filtrar a lista na tela de acordo com o estado do chip selecionado
+  const notificacoesFiltradas = notificacoes.filter((n) => {
     if (filtro === "todas") return true;
     return n.canal.toLowerCase() === filtro;
   });
@@ -52,38 +53,18 @@ export default function App() {
     <div className="max-w-2xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4 text-gray-800">Central de Notificações</h1>
 
-      {/* Seção de Chips de Filtro */}
-      <div className="flex gap-2 mb-4">
-        <FilterChip
-          label="Todas"
-          ativo={filtro === "todas"}
-          onClick={() => setFiltro("todas")}
-        />
-        <FilterChip
-          label="Push"
-          ativo={filtro === "push"}
-          onClick={() => setFiltro("push")}
-        />
-        <FilterChip
-          label="E-mail"
-          ativo={filtro === "email"}
-          onClick={() => setFiltro("email")}
-        />
-      </div>
+      {/* Componente Extraído (Parte 2) — Barra de Filtros */}
+      <FilterBar filtroAtual={filtro} onMudarFiltro={setFiltro} />
 
-      {/* Uso da Composição: Passando os cards de notificação DENTRO da lista usando children */}
-      <NotificationList title={`Mensagens (${notificacoesFiltradas.length})`}>
-        {notificacoesFiltradas.length === 0 ? (
-          <p className="text-sm text-gray-400 py-4 text-center">Nenhuma notificação por aqui.</p>
-        ) : (
-          notificacoesFiltradas.map((n) => (
-            <NotificationCard key={n.id} {...n} />
-          ))
-        )}
+      {/* Componente Extraído (Parte 2) — Casca da lista gerenciando o children */}
+      <NotificationList count={notificacoesFiltradas.length}>
+        {notificacoesFiltradas.map((n) => (
+          <NotificationCard key={n.id} {...n} />
+        ))}
       </NotificationList>
 
-      {/* Botão com a prop children e variante de destaque */}
-      <Button variant="destaque" onClick={() => alert("Notificação enviada!")}>
+      {/* Botão chamando a função imutável no clique */}
+      <Button variant="destaque" onClick={adicionarNotificacaoTeste}>
         Enviar notificação de teste
       </Button>
     </div>

@@ -1,72 +1,36 @@
-import { useState, useEffect } from "react";
-import { API_URL } from "./config";
+import { Routes, Route, Navigate } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import { useAuth } from "./context/AuthContext";
 
-import FilterBar from "./components/FilterBar";
-import NotificationList from "./components/NotificationList";
-import NovaNotificacaoForm from "./components/NovaNotificacaoForm";
+// Componente de segurança que checa se o usuário tem um token
+function RotaProtegida({ children }) {
+  const { token } = useAuth();
 
-function App() {
-  const [filtro, setFiltro] = useState("todas");
-  const [notificacoes, setNotificacoes] = useState([]);
-  const [carregando, setCarregando] = useState(true);
-  const [erro, setErro] = useState(null);
-
-
-  // Função para adicionar nova notificação respeitando a imutabilidade
-  function adicionarNotificacao(nova) {
-    setNotificacoes((atual) => [nova, ...atual]);
+  // Se não houver token salvo, redireciona imediatamente para o login
+  if (!token) {
+    return <Navigate to="/login" />;
   }
 
-  useEffect(() => {
-    async function buscar() {
-      try {
-        const resposta = await fetch(`${API_URL}/notificacoes`);
+  // Se houver token, deixa acessar a página normalmente
+  return children;
+}
 
-        // Se a API responder com erro, lança para o catch
-        if (!resposta.ok) throw new Error("Erro ao buscar notificações");
-
-        const dados = await resposta.json();
-        setNotificacoes(dados);
-      } catch (e) {
-        setErro(e.message);
-      } finally {
-        setCarregando(false);
-      }
-    }
-    buscar();
-  }, []);
-
-  // Lógica que filtra o array antes de mandar para o componente de listagem
-  const notificacoesVisiveis = notificacoes.filter((n) => {
-    if (filtro === "todas") return true;
-    if (filtro === "push") return n.canal === "PUSH";
-    if (filtro === "email") return n.canal === "EMAIL";
-  });
-
+function App() {
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Central de Notificações</h1>
-
-      {/* Formulário controlado adicionado no topo */}
-      <NovaNotificacaoForm onAdicionar={adicionarNotificacao} />
-
-      {/* Barra de filtros extraída */}
-      <FilterBar filtroAtual={filtro} onFiltroChange={setFiltro} />
-
-      {/* Se estiver carregando, mostra o aviso */}
-      {carregando && <p className="text-gray-500">Carregando notificações...</p>}
-
-      {/* Se der erro na busca, mostra a mensagem amigável */}
-      {erro && (
-        <p className="text-red-600">Não foi possível carregar as notificações. Tente novamente.</p>
-      )}
-
-      {/* Se já carregou e não deu erro, exibe a lista original */}
-      {!carregando && !erro && (
-        <NotificationList notificacoes={notificacoesVisiveis} />
-      )}
-
-    </div>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      
+      {/* Protegemos a rota inicial colocando a Home dentro da RotaProtegida */}
+      <Route
+        path="/"
+        element={
+          <RotaProtegida>
+            <Home />
+          </RotaProtegida>
+        }
+      />
+    </Routes>
   );
 }
 
